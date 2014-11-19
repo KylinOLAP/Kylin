@@ -208,21 +208,26 @@ public class CubeDevelopTestCase extends HBaseMetadataTestCase {
         FileUtils.copyFile(new File(".." + File.separator + "job" + File.separator + "target" + File.separator + jobJarName), targetFile);
     }
 
+    private String getKylinConfProperties() {
+        return System.getenv("KYLIN_CONF") == null ? KylinConfig.KYLIN_CONF_DEFAULT : System.getenv("KYLIN_CONF");
+    }
+
     private void deployKylinPropertyToLocalDir() throws Exception {
         String srcPath = ".." + File.separator + "examples" + File.separator + "test_case_data" + File.separator + "kylin.properties";
-        FileUtils.copyFileToDirectory(new File(srcPath), new File("/etc/kylin"));
+
+        FileUtils.copyFileToDirectory(new File(srcPath), new File(getKylinConfProperties()));
     }
 
     private void deployJobConfToLocalDir(boolean jobEnableLzo) throws Exception {
         String srcFile;
 
         if (jobEnableLzo) {
-            logger.info("job conf: the lzo enabled version is deployed to /etc/kylin");
+            logger.info("job conf: the lzo enabled version is deployed to " + getKylinConfProperties());
 
             srcFile = getExampleTestCaseDataFolder() + JobEngineConfig.HADOOP_JOB_CONF_FILENAME + ".xml";
 
         } else {
-            logger.info("job conf: the lzo disabled version is deployed to /etc/kylin");
+            logger.info("job conf: the lzo disabled version is deployed to " + getKylinConfProperties());
 
             File temp = File.createTempFile("temp", Long.toString(System.nanoTime()));
             temp.delete();
@@ -234,7 +239,7 @@ public class CubeDevelopTestCase extends HBaseMetadataTestCase {
             dest.deleteOnExit();
         }
 
-        FileUtils.copyFileToDirectory(new File(srcFile), new File("/etc/kylin"));
+        FileUtils.copyFileToDirectory(new File(srcFile), new File(getKylinConfProperties()));
     }
 
     private String getExampleTestCaseDataFolder() {
