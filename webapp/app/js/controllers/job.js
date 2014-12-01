@@ -82,9 +82,12 @@ KylinApp
 
 
         $scope.$watch('project.selectedProject', function (newValue, oldValue) {
-            $scope.jobs={};
-            $scope.state.projectName = newValue;
-            $scope.list();
+            if(oldValue){
+                $scope.jobs={};
+                $scope.state.projectName = newValue;
+                $scope.reload();
+            }
+
         });
         $scope.resume = function (job) {
             if (confirm("Are you sure to resume the job?")) {

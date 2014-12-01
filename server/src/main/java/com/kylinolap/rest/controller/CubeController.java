@@ -59,7 +59,7 @@ import com.kylinolap.rest.response.GeneralResponse;
 import com.kylinolap.rest.response.HBaseResponse;
 import com.kylinolap.rest.service.CubeService;
 import com.kylinolap.rest.service.JobService;
-import com.kylinolap.storage.hbase.coprocessor.CoprocessorEnabler;
+import com.kylinolap.storage.hbase.observer.CoprocessorEnabler;
 
 /**
  * CubeController is defined as Restful API entrance for UI.
@@ -315,7 +315,7 @@ public class CubeController extends BasicController {
             cubeService.createCubeAndDesc(name, projectName, desc);
         } catch (Exception e) {
             logger.error("Failed to deal with the request.", e);
-            throw new InternalErrorException(e.getLocalizedMessage());
+            throw new InternalErrorException(e.getLocalizedMessage(),e);
         }
 
         cubeRequest.setUuid(desc.getUuid());
@@ -357,6 +357,7 @@ public class CubeController extends BasicController {
             throw new ForbiddenException("You don't have right to update this cube.");
         } catch (Exception e) {
             logger.error("Failed to deal with the request.", e);
+            e.printStackTrace();
             throw new InternalErrorException("Failed to deal with the request.", e);
         }
 
