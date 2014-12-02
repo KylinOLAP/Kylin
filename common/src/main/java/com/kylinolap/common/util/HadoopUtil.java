@@ -72,7 +72,7 @@ public class HadoopUtil {
             return conf;
 
         // case of "hbase:domain.com:2181:/hbase-unsecure"
-        Pattern urlPattern = Pattern.compile("([\\w\\d\\-.]+)[:](\\d+)(?:[:](.*))?");
+        Pattern urlPattern = Pattern.compile("([\\w\\d\\-.,]+)[:](\\d+)(?:[:](.*))?");
         Matcher m = urlPattern.matcher(url);
         if (m.matches() == false)
             throw new IllegalArgumentException("HBase URL '" + url + "' is invalid, expected url is like '" + "hbase:domain.com:2181:/hbase-unsecure" + "'");
@@ -81,7 +81,8 @@ public class HadoopUtil {
 
         String quorum = m.group(1);
         try {
-            InetAddress.getByName(quorum);
+            for (String quorum_node : quorum.split(","))
+                InetAddress.getByName(quorum_node);
         } catch (UnknownHostException e) {
             throw new IllegalArgumentException("Zookeeper quorum is invalid: " + quorum + "; urlString=" + url, e);
         }
