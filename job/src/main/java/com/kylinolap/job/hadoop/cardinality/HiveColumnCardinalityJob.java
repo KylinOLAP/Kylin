@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -31,12 +29,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.security.UserGroupInformation;
 import org.apache.hadoop.util.ToolRunner;
-import org.apache.hive.hcatalog.data.schema.HCatSchema;
 import org.apache.hive.hcatalog.mapreduce.HCatInputFormat;
 
-import com.kylinolap.job.JobDAO;
-import com.kylinolap.job.JobInstance;
-import com.kylinolap.job.JobInstance.JobStep;
 import com.kylinolap.job.hadoop.AbstractHadoopJob;
 
 public class HiveColumnCardinalityJob extends AbstractHadoopJob {
@@ -144,8 +138,9 @@ public class HiveColumnCardinalityJob extends AbstractHadoopJob {
             // Mapper
             this.table = getOptionValue(OPTION_TABLE);
             System.out.println("Going to start HiveColumnCardinalityJob on table '" + table + "'");
+            String filter = "\"dt\"=\"20150101\" and \"hour\"=\"00\"";
             HCatInputFormat.setInput(job, "default",
-                    table);
+                    table, filter);
 
             System.out.println("Set input format as HCat on table '" + table + "'");
             
