@@ -138,7 +138,7 @@ public class HiveColumnCardinalityJob extends AbstractHadoopJob {
             // Mapper
             this.table = getOptionValue(OPTION_TABLE);
             System.out.println("Going to start HiveColumnCardinalityJob on table '" + table + "'");
-            String filter = "\"dt\"=\"20150101\" and \"hour\"=\"00\"";
+            String filter = "dt=\"20150101\" and hour=\"00\"";
             HCatInputFormat.setInput(job, "default",
                     table, filter);
 
