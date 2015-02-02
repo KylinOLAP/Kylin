@@ -305,6 +305,7 @@ public class KylinClient implements RemoteClient {
     }
 
     private void addPostHeaders(HttpMethodBase method) {
+        method.getParams().setContentCharset(this.conn.getAllInfo().getProperty("characterEncoding", "ISO-8859-1"));
         method.addRequestHeader("Accept", "application/json, text/plain, */*");
         method.addRequestHeader("Content-Type", "application/json");
         method.addRequestHeader("Authorization", "Basic " + conn.getBasicAuthHeader());
