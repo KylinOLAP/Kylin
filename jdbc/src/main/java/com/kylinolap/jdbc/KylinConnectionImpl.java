@@ -16,12 +16,15 @@
 
 package com.kylinolap.jdbc;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringTokenizer;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -52,12 +55,57 @@ public abstract class KylinConnectionImpl extends AvaticaConnection {
     private MetaProject metaProject;
     public final List<AvaticaStatement> statements;
     static final Trojan TROJAN = createTrojan();
-
+    private Properties allInfo = new Properties();
+    
     protected KylinConnectionImpl(UnregisteredDriver driver, AvaticaFactory factory, String url, Properties info) {
         super(driver, factory, url, info);
 
+        allInfo.putAll(this.info);
+        
         String odbcUrl = url;
+        String keyValues = "";
         odbcUrl = odbcUrl.replace(Driver.CONNECT_STRING_PREFIX + "//", "");
+        
+        int idx = odbcUrl.indexOf("?");
+        if ( idx != -1){
+            
+            keyValues = odbcUrl.substring(idx + 1);
+            odbcUrl = odbcUrl.substring(0, idx);
+            
+            StringTokenizer queryParams = new StringTokenizer(keyValues, "&"); 
+            while (queryParams.hasMoreTokens()) {
+                
+                String parameterValuePair = queryParams.nextToken();
+
+                int indexOfEquals = parameterValuePair.indexOf("=");
+
+                String parameter = null;
+                String value = null;
+
+                if (indexOfEquals != -1) {
+                    parameter = parameterValuePair.substring(0, indexOfEquals);
+
+                    if (indexOfEquals + 1 < parameterValuePair.length()) {
+                        value = parameterValuePair.substring(indexOfEquals + 1);
+                    }
+                }
+
+                if ((value != null && value.length() > 0)
+                        && (parameter != null && parameter.length() > 0)) {
+                    try {
+                        allInfo.put(parameter, URLDecoder.decode(value,
+                                "UTF-8"));
+                    } catch (UnsupportedEncodingException badEncoding) {
+                        // punt
+                        allInfo.put(parameter, URLDecoder.decode(value));
+                    } catch (NoSuchMethodError nsme) {
+                        // punt again
+                        allInfo.put(parameter, URLDecoder.decode(value));
+                    }
+                }
+            }
+        }
+        
         String[] temps = odbcUrl.split("/");
 
         assert temps.length == 2;
@@ -141,6 +189,14 @@ public abstract class KylinConnectionImpl extends AvaticaConnection {
         this.metaProject = metaProject;
     }
 
+    public Properties getAllInfo() {
+        return allInfo;
+    }
+
+    public void setAllInfo(Properties allInfo) {
+        this.allInfo = allInfo;
+    }
+    
     @Override
     public void close() throws SQLException {
         super.close();
