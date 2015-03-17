@@ -28,16 +28,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.sql.DataSource;
 
@@ -49,6 +40,7 @@ import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.kylin.common.util.StringUtil;
 import org.apache.kylin.rest.constant.Constant;
 import org.apache.kylin.rest.metrics.QueryMetrics;
 import org.apache.kylin.rest.model.ColumnMeta;
@@ -60,6 +52,7 @@ import org.apache.kylin.rest.request.SQLRequest;
 import org.apache.kylin.rest.response.SQLResponse;
 import org.apache.kylin.rest.util.QueryUtil;
 import org.apache.kylin.rest.util.Serializer;
+import org.h2.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;
@@ -280,7 +273,9 @@ public class QueryService extends BasicService {
         Connection conn = null;
         ResultSet columnMeta = null;
         List<TableMeta> tableMetas = null;
-
+        if(StringUtils.isNullOrEmpty(project)){
+            return Collections.emptyList();
+        }
         try {
             DataSource dataSource = getOLAPDataSource(project);
             conn = dataSource.getConnection();
