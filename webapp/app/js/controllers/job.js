@@ -77,7 +77,7 @@ KylinApp
             return JobList.list(jobRequest).then(function(resp){
                 $scope.state.loading = false;
                 defer.resolve(resp);
-                defer.promise;
+                return defer.promise;
             });
         }
 

@@ -59,7 +59,7 @@ KylinApp
             return CubeList.list(queryParam).then(function(resp){
                 $scope.loading = false;
                 defer.resolve(resp);
-                defer.promise;
+                return defer.promise;
             });
         };
 
