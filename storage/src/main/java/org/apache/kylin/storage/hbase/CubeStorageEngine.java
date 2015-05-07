@@ -422,8 +422,10 @@ public class CubeStorageEngine implements IStorageEngine {
             }
 
             Collection<ColumnValueRange> andRanges = translateToAndDimRanges(andFilter.getChildren(), cubeSegment);
-
-            result.add(andRanges);
+            // ignore the empty-AND
+            if (andRanges != null && !andRanges.isEmpty()) {
+                result.add(andRanges);
+            }
         }
 
         return preprocessConstantConditions(result);
@@ -459,6 +461,7 @@ public class CubeStorageEngine implements IStorageEngine {
 
     private Collection<ColumnValueRange> translateToAndDimRanges(List<? extends TupleFilter> andFilters, CubeSegment cubeSegment) {
         Map<TblColRef, ColumnValueRange> rangeMap = new HashMap<TblColRef, ColumnValueRange>();
+        boolean isEmptyAnd = false;
         for (TupleFilter filter : andFilters) {
             if ((filter instanceof CompareTupleFilter) == false) {
                 continue;
@@ -469,11 +472,20 @@ public class CubeStorageEngine implements IStorageEngine {
                 continue;
             }
 
+            // optimize the values of tuple filter
+            Collection<String> newValues = TupleFilterValueOptimizer.doOptimization(cubeSegment, comp.getColumn(), comp);
+            // in case the current filter is an empty-AND, do not generate ColumnValueRange
+            // and also set isEmptyAnd to true so that an empty AND-list will be returned
+            if (TupleFilterValueOptimizer.isEmptyAnd(comp, newValues)) {
+                isEmptyAnd = true;
+                break;
+            }
+
             ColumnValueRange range = new ColumnValueRange(comp.getColumn(), comp.getValues(), comp.getOperator());
             andMerge(range, rangeMap);
 
         }
-        return rangeMap.values();
+        return isEmptyAnd ? Collections.<ColumnValueRange> emptyList() : rangeMap.values();
     }
 
     private void andMerge(ColumnValueRange range, Map<TblColRef, ColumnValueRange> rangeMap) {
