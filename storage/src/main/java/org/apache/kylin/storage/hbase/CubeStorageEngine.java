@@ -481,7 +481,7 @@ public class CubeStorageEngine implements IStorageEngine {
                 break;
             }
 
-            ColumnValueRange range = new ColumnValueRange(comp.getColumn(), comp.getValues(), comp.getOperator());
+            ColumnValueRange range = new ColumnValueRange(comp.getColumn(), newValues, comp.getOperator());
             andMerge(range, rangeMap);
 
         }
