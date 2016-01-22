@@ -19,6 +19,7 @@
 package org.apache.kylin.jdbc.util;
 
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -169,7 +170,7 @@ public class SQLTypeMap {
         case Types.BINARY:
         case Types.VARBINARY:
         case Types.LONGVARBINARY:
-            return value.getBytes();
+            return value.getBytes(Charset.forName("UTF-8"));
         case Types.DATE:
             return Date.valueOf(value);
         case Types.TIME:

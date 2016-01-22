@@ -18,6 +18,7 @@
 
 package org.apache.kylin.invertedindex.model;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -356,8 +357,8 @@ public class IIDesc extends RootPersistentEntity {
             StringBuilder sigString = new StringBuilder();
             sigString.append(this.name).append("|").append(this.getFactTableName()).append("|").append(timestampDimension).append("|").append(JsonUtil.writeValueAsString(this.bitmapDimensions)).append("|").append(JsonUtil.writeValueAsString(valueDimensions)).append("|").append(JsonUtil.writeValueAsString(this.metricNames)).append("|").append(sharding).append("|").append(sliceSize);
 
-            byte[] signature = md.digest(sigString.toString().getBytes());
-            return new String(Base64.encodeBase64(signature));
+            byte[] signature = md.digest(sigString.toString().getBytes(Charset.forName("UTF-8")));
+            return new String(Base64.encodeBase64(signature), Charset.forName("UTF-8"));
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Failed to calculate signature");
         } catch (JsonProcessingException e) {

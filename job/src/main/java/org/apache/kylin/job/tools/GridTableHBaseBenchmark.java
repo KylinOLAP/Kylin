@@ -19,6 +19,7 @@
 package org.apache.kylin.job.tools;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Random;
 
@@ -45,8 +46,8 @@ import com.google.common.collect.Lists;
 public class GridTableHBaseBenchmark {
 
     private static final String TEST_TABLE = "GridTableTest";
-    private static final byte[] CF = "F".getBytes();
-    private static final byte[] QN = "C".getBytes();
+    private static final byte[] CF = "F".getBytes(Charset.forName("UTF-8"));
+    private static final byte[] QN = "C".getBytes(Charset.forName("UTF-8"));
     private static final int N_ROWS = 10000;
     private static final int CELL_SIZE = 128 * 1024; // 128 KB
     private static final double DFT_HIT_RATIO = 0.3;

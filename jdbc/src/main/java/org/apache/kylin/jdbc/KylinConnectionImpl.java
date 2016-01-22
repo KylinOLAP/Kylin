@@ -18,6 +18,7 @@
 
 package org.apache.kylin.jdbc;
 
+import java.nio.charset.Charset;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -99,7 +100,7 @@ public abstract class KylinConnectionImpl extends AvaticaConnection {
         String username = this.info.getProperty("user");
         String password = this.info.getProperty("password");
 
-        return DatatypeConverter.printBase64Binary((username + ":" + password).getBytes());
+        return DatatypeConverter.printBase64Binary((username + ":" + password).getBytes(Charset.forName("UTF-8")));
     }
 
     public String getConnectUrl() {

@@ -18,6 +18,7 @@
 package org.apache.kylin.metadata.measure.fixedlen;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import org.apache.kylin.common.hll.HyperLogLogPlusCounter;
 import org.apache.kylin.metadata.model.DataType;
@@ -53,7 +54,7 @@ public class FixedHLLCodec extends FixedLenMeasureCodec<HyperLogLogPlusCounter> 
         if (value == null)
             current.add("__nUlL__");
         else
-            current.add(value.getBytes());
+            current.add(value.getBytes(Charset.forName("UTF-8")));
         return current;
     }
 
