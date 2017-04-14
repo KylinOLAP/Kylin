@@ -20,6 +20,7 @@ package org.apache.kylin.rest.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -74,7 +75,11 @@ public class AdminService extends BasicService {
 
             // do save
             tempConfig.save(baos);
-            content = baos.toString();
+            try {
+                content = baos.toString("UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                content = baos.toString();
+            }
             return content;
         } catch (ConfigurationException e) {
             throw new InternalErrorException("Failed to get Kylin env Config", e);

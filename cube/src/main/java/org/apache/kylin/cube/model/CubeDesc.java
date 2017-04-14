@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import java.nio.charset.Charset;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.util.Base64;
@@ -409,8 +411,8 @@ public class CubeDesc extends RootPersistentEntity {
             StringBuilder sigString = new StringBuilder();
             sigString.append(this.name).append("|").append(this.getFactTable()).append("|").append(JsonUtil.writeValueAsString(this.model.getPartitionDesc())).append("|").append(JsonUtil.writeValueAsString(this.dimensions)).append("|").append(JsonUtil.writeValueAsString(this.measures)).append("|").append(JsonUtil.writeValueAsString(this.rowkey)).append("|").append(JsonUtil.writeValueAsString(this.hbaseMapping));
 
-            byte[] signature = md.digest(sigString.toString().getBytes());
-            return new String(Base64.encodeBase64(signature));
+            byte[] signature = md.digest(sigString.toString().getBytes(Charset.forName("UTF-8")));
+            return new String(Base64.encodeBase64(signature), Charset.forName("UTF-8"));
         } catch (NoSuchAlgorithmException | JsonProcessingException e) {
             throw new RuntimeException("Failed to calculate signature");
         }

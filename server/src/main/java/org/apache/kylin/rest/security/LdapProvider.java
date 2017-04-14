@@ -18,6 +18,7 @@
 
 package org.apache.kylin.rest.security;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -74,7 +75,7 @@ public class LdapProvider extends LdapAuthenticationProvider {
         Authentication authed = null;
         Cache userCache = cacheManager.getCache("UserCache");
         md.reset();
-        byte[] hashKey = md.digest((authentication.getName() + authentication.getCredentials()).getBytes());
+        byte[] hashKey = md.digest((authentication.getName() + authentication.getCredentials()).getBytes(Charset.forName("UTF-8")));
         String userKey = Arrays.toString(hashKey);
 
         Element authedUser = userCache.get(userKey);

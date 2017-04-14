@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +90,7 @@ public class SSHClient {
                 // The access time should be sent here,
                 // but it is not accessible with JavaAPI ;-<
                 command += (" " + (_lfile.lastModified() / 1000) + " 0\n");
-                out.write(command.getBytes());
+                out.write(command.getBytes(Charset.forName("UTF-8")));
                 out.flush();
                 if (checkAck(in) != 0) {
                     throw new Exception("Error in checkAck()");
@@ -292,7 +293,7 @@ public class SSHClient {
                     if (i < 0)
                         break;
 
-                    String line = new String(tmp, 0, i);
+                    String line = new String(tmp, 0, i, Charset.forName("UTF-8"));
                     text.append(line);
                     if (logAppender != null) {
                         logAppender.log(line);

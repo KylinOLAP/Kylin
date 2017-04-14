@@ -18,6 +18,7 @@
 
 package org.apache.kylin.cube.model.v1;
 
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -454,8 +455,8 @@ public class CubeDesc extends RootPersistentEntity {
             StringBuilder sigString = new StringBuilder();
             sigString.append(this.name).append("|").append(this.factTable).append("|").append(JsonUtil.writeValueAsString(this.cubePartitionDesc)).append("|").append(JsonUtil.writeValueAsString(this.dimensions)).append("|").append(JsonUtil.writeValueAsString(this.measures)).append("|").append(JsonUtil.writeValueAsString(this.rowkey)).append("|").append(JsonUtil.writeValueAsString(this.hbaseMapping));
 
-            byte[] signature = md.digest(sigString.toString().getBytes());
-            return new String(Base64.encodeBase64(signature));
+            byte[] signature = md.digest(sigString.toString().getBytes(Charset.forName("UTF-8")));
+            return new String(Base64.encodeBase64(signature), Charset.forName("UTF-8"));
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Failed to calculate signature");
         } catch (JsonProcessingException e) {
