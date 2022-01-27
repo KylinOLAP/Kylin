@@ -74,7 +74,7 @@
         <jackson.version>2.2.3</jackson.version>
         <guava.version>12.0</guava.version>
         <jsch.version>0.1.51</jsch.version>
-        <xerces.version>2.9.1</xerces.version>
+        <xerces.version>2.12.2</xerces.version>
         <xalan.version>2.7.1</xalan.version>
         <compress-lzf.version>1.0.3</compress-lzf.version>
         <extendedset.version>1.3.4</extendedset.version>
