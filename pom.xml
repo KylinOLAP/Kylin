@@ -45,7 +45,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Hadoop versions -->
-        <hadoop2.version>2.6.0</hadoop2.version>
+        <hadoop2.version>2.10.1</hadoop2.version>
         <yarn.version>2.6.0</yarn.version>
         <zookeeper.version>3.4.6</zookeeper.version>
         <hive.version>0.14.0</hive.version>
