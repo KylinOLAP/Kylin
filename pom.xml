@@ -73,7 +73,7 @@
         <slf4j.version>1.6.4</slf4j.version>
         <jackson.version>2.2.3</jackson.version>
         <guava.version>12.0</guava.version>
-        <jsch.version>0.1.51</jsch.version>
+        <jsch.version>0.1.54</jsch.version>
         <xerces.version>2.9.1</xerces.version>
         <xalan.version>2.7.1</xalan.version>
         <compress-lzf.version>1.0.3</compress-lzf.version>
